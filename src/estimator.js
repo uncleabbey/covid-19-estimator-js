@@ -13,27 +13,41 @@ const input = {
 };
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
-const infectionsByRequestedTime = (theCurrentlyInfected, days) => {
-  const totalInDays = theCurrentlyInfected * 2 ** Math.floor(days / 3);
-  return totalInDays;
+const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
+  let infected = null;
+  const { periodType, timeToElapse } = data;
+  switch (periodType) {
+    case 'days':
+      infected = theCurrentlyInfected * (2 ** Math.floor(timeToElapse / 3));
+      break;
+    case 'weeks':
+      infected = theCurrentlyInfected * (2 ** Math.floor((timeToElapse / 7) / 3));
+      break;
+    case 'months':
+      infected = theCurrentlyInfected * (2 ** Math.floor((timeToElapse / 30) / 3));
+      break;
+    default:
+      infected = theCurrentlyInfected * (2 ** Math.floor(timeToElapse / 3));
+  }
+  return infected;
 };
 
 const covid19ImpactEstimator = (data = input) => {
-  const { reportedCases, timeToElapse } = data;
+  const { reportedCases } = data;
   return {
     data,
     impact: {
       currentlyInfected: currentlyInfected(reportedCases, 10),
       infectionsByRequestedTime: infectionsByRequestedTime(
-        currentlyInfected(reportedCases, 10),
-        timeToElapse
+        data,
+        currentlyInfected(reportedCases, 10)
       )
     },
     severeImpact: {
       currentlyInfected: currentlyInfected(reportedCases, 50),
       infectionsByRequestedTime: infectionsByRequestedTime(
-        currentlyInfected(reportedCases, 50),
-        timeToElapse
+        data,
+        currentlyInfected(reportedCases, 50)
       )
     }
   };
