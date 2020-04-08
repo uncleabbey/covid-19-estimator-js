@@ -11,18 +11,31 @@ const input = {
   population: 66622705,
   totalHospitalBeds: 1380614
 };
+const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
+
+const infectionsByRequestedTime = (theCurrentlyInfected, days) => {
+  const totalInDays = theCurrentlyInfected * 2 ** Math.floor(days / 3);
+  return totalInDays;
+};
 
 const covid19ImpactEstimator = (data = input) => {
-  const { reportedCases } = data;
+  const { reportedCases, timeToElapse } = data;
   return {
     data,
     impact: {
-      currentlyInfected: reportedCases * 10
+      currentlyInfected: currentlyInfected(reportedCases, 10),
+      infectionsByRequestedTime: infectionsByRequestedTime(
+        currentlyInfected(reportedCases, 10),
+        timeToElapse
+      )
     },
     severeImpact: {
-      currentlyInfected: reportedCases * 50
+      currentlyInfected: currentlyInfected(reportedCases, 50),
+      infectionsByRequestedTime: infectionsByRequestedTime(
+        currentlyInfected(reportedCases, 50),
+        timeToElapse
+      )
     }
   };
 };
-
 export default covid19ImpactEstimator;
