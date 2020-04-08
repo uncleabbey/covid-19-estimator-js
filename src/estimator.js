@@ -1,4 +1,5 @@
 import infectionsByRequestedTime from './infectionsByRequestedTime';
+import dollarsInFlight from './dollarsInFlight';
 
 const input = {
   region: {
@@ -14,19 +15,19 @@ const input = {
   totalHospitalBeds: 1380614
 };
 
-
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
-
 
 const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
 
-
 const hospitalBedsByRequestedTime = (data, severity) => {
   const { totalHospitalBeds } = data;
-  const availableBeds = (totalHospitalBeds * 0.35);
+  const availableBeds = totalHospitalBeds * 0.35;
   return availableBeds - severity;
 };
 
+const casesForICUByRequestedTime = (infections) => infections * 0.05;
+
+const casesForVentilatorsByRequestedTime = (infections) => infections * 0.02;
 
 const covid19ImpactEstimator = (data = input) => {
   const { reportedCases } = data;
@@ -39,19 +40,23 @@ const covid19ImpactEstimator = (data = input) => {
         currentlyInfected(reportedCases, 10)
       ),
       severeCasesByRequestedTime: severeCasesByRequestedTime(
-        infectionsByRequestedTime(
-          data,
-          currentlyInfected(reportedCases, 10)
-        )
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
       ),
       hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
         data,
         severeCasesByRequestedTime(
-          infectionsByRequestedTime(
-            data,
-            currentlyInfected(reportedCases, 10)
-          )
+          infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
         )
+      ),
+      casesForICUByRequestedTime: casesForICUByRequestedTime(
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+      ),
+      casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTime(
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+      ),
+      dollarsInFlight: dollarsInFlight(
+        data,
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
       )
     },
     severeImpact: {
@@ -61,19 +66,23 @@ const covid19ImpactEstimator = (data = input) => {
         currentlyInfected(reportedCases, 50)
       ),
       severeCasesByRequestedTime: severeCasesByRequestedTime(
-        infectionsByRequestedTime(
-          data,
-          currentlyInfected(reportedCases, 50)
-        )
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
       ),
       hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
         data,
         severeCasesByRequestedTime(
-          infectionsByRequestedTime(
-            data,
-            currentlyInfected(reportedCases, 50)
-          )
+          infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
         )
+      ),
+      casesForICUByRequestedTime: casesForICUByRequestedTime(
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+      ),
+      casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTime(
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+      ),
+      dollarsInFlight: dollarsInFlight(
+        data,
+        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
       )
     }
   };
