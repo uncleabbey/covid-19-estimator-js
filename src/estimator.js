@@ -18,12 +18,12 @@ const input = {
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
 
-const severeCasesByRequestedTime = (time) => (time * (15 / 100));
+const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
 
 
 const hospitalBedsByRequestedTime = (data, severity) => {
   const { totalHospitalBeds } = data;
-  const availableBeds = (totalHospitalBeds * (35 / 100));
+  const availableBeds = (totalHospitalBeds * 0.35);
   return availableBeds - severity;
 };
 
