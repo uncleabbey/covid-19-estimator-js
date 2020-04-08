@@ -9,7 +9,7 @@ const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
       infected = theCurrentlyInfected * 2 ** Math.round((timeToElapse * 30) / 3);
       break;
     default:
-      infected = theCurrentlyInfected * 2 ** Math.round(timeToElapse / 3);
+      infected = theCurrentlyInfected * 2 ** Math.floor(timeToElapse / 3);
   }
   return infected;
 };
