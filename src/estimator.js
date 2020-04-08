@@ -1,3 +1,5 @@
+import infectionsByRequestedTime from './infectionsByRequestedTime';
+
 const input = {
   region: {
     name: 'Africa',
@@ -11,23 +13,20 @@ const input = {
   population: 66622705,
   totalHospitalBeds: 1380614
 };
+
+
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
-const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
-  let infected = null;
-  const { periodType, timeToElapse } = data;
-  switch (periodType) {
-    case 'weeks':
-      infected = theCurrentlyInfected * (2 ** Math.round((timeToElapse * 7) / 3));
-      break;
-    case 'months':
-      infected = theCurrentlyInfected * (2 ** Math.round((timeToElapse * 30) / 3));
-      break;
-    default:
-      infected = theCurrentlyInfected * (2 ** Math.round(timeToElapse / 3));
-  }
-  return infected;
+
+const severeCasesByRequestedTime = (time) => Math.round(time * (15 / 100));
+
+
+const hospitalBedsByRequestedTime = (data, severity) => {
+  const { totalHospitalBeds } = data;
+  const availableBeds = totalHospitalBeds * (35 / 100);
+  return availableBeds - severity;
 };
+
 
 const covid19ImpactEstimator = (data = input) => {
   const { reportedCases } = data;
@@ -38,6 +37,21 @@ const covid19ImpactEstimator = (data = input) => {
       infectionsByRequestedTime: infectionsByRequestedTime(
         data,
         currentlyInfected(reportedCases, 10)
+      ),
+      severeCasesByRequestedTime: severeCasesByRequestedTime(
+        infectionsByRequestedTime(
+          data,
+          currentlyInfected(reportedCases, 10)
+        )
+      ),
+      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
+        data,
+        severeCasesByRequestedTime(
+          infectionsByRequestedTime(
+            data,
+            currentlyInfected(reportedCases, 10)
+          )
+        )
       )
     },
     severeImpact: {
@@ -45,6 +59,21 @@ const covid19ImpactEstimator = (data = input) => {
       infectionsByRequestedTime: infectionsByRequestedTime(
         data,
         currentlyInfected(reportedCases, 50)
+      ),
+      severeCasesByRequestedTime: severeCasesByRequestedTime(
+        infectionsByRequestedTime(
+          data,
+          currentlyInfected(reportedCases, 50)
+        )
+      ),
+      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
+        data,
+        severeCasesByRequestedTime(
+          infectionsByRequestedTime(
+            data,
+            currentlyInfected(reportedCases, 50)
+          )
+        )
       )
     }
   };
