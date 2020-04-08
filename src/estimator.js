@@ -1,6 +1,3 @@
-import infectionsByRequestedTime from './infectionsByRequestedTime';
-import dollarsInFlight from './dollarsInFlight';
-
 const input = {
   region: {
     name: 'Africa',
@@ -14,10 +11,25 @@ const input = {
   population: 66622705,
   totalHospitalBeds: 1380614
 };
+const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
+  let infected = null;
+  const { periodType, timeToElapse } = data;
+  switch (periodType) {
+    case 'weeks':
+      infected = theCurrentlyInfected * 2 ** Math.floor((timeToElapse * 7) / 3);
+      break;
+    case 'months':
+      infected = theCurrentlyInfected * 2 ** Math.floor((timeToElapse * 30) / 3);
+      break;
+    default:
+      infected = theCurrentlyInfected * 2 ** Math.floor(timeToElapse / 3);
+  }
+  return infected;
+};
 
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
-const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
+const severeCasesByRequestedTime = (time) => (time * 0.15);
 
 const hospitalBedsByRequestedTime = (data, severity) => {
   const { totalHospitalBeds } = data;
@@ -28,6 +40,32 @@ const hospitalBedsByRequestedTime = (data, severity) => {
 const casesForICUByRequestedTime = (infections) => infections * 0.05;
 
 const casesForVentilatorsByRequestedTime = (infections) => infections * 0.02;
+
+const dollarsInFlight = (data, infection) => {
+  const { avgDailyIncomePopulation, avgDailyIncomeInUSD } = data.region;
+  const { periodType, timeToElapse } = data;
+  let dollars;
+  switch (periodType) {
+    case 'weeks':
+      dollars = infection
+        * avgDailyIncomePopulation
+        * avgDailyIncomeInUSD
+        * (timeToElapse * 7);
+      break;
+    case 'months':
+      dollars = infection
+        * avgDailyIncomePopulation
+        * avgDailyIncomeInUSD
+        * (timeToElapse * 30);
+      break;
+    default:
+      dollars = infection
+        * avgDailyIncomePopulation
+        * avgDailyIncomeInUSD
+        * timeToElapse;
+  }
+  return dollars;
+};
 
 const covid19ImpactEstimator = (data = input) => {
   const { reportedCases } = data;
