@@ -18,20 +18,20 @@ const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
   const { periodType, timeToElapse } = data;
   switch (periodType) {
     case 'weeks':
-      infected = theCurrentlyInfected * (2 ** (Math.floor((timeToElapse * 7) / 3)));
+      infected = theCurrentlyInfected * (2 ** (Math.round((timeToElapse * 7) / 3)));
       break;
     case 'months':
-      infected = theCurrentlyInfected * (2 ** (Math.floor((timeToElapse * 30) / 3)));
+      infected = theCurrentlyInfected * (2 ** (Math.round((timeToElapse * 30) / 3)));
       break;
     default:
-      infected = theCurrentlyInfected * (2 ** (Math.floor(timeToElapse / 3)));
+      infected = theCurrentlyInfected * (2 ** (Math.round(timeToElapse / 3)));
   }
   return infected;
 };
 
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
-const severeCasesByRequestedTime = (time) => (time * 0.15);
+const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
 
 const hospitalBedsByRequestedTime = (data, severity) => {
   const { totalHospitalBeds } = data;
