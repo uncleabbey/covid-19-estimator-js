@@ -78,15 +78,15 @@ const covid19ImpactEstimator = (data = input) => {
     data,
     currentlyInfected(reportedCases, 50)
   );
-  const severeCaseFI = Math.floor(severeCasesByRequestedTime(infections));
-  const severeCaseFS = Math.floor(severeCasesByRequestedTime(infectionsFS));
+  const severeCaseFI = severeCasesByRequestedTime(infections);
+  const severeCaseFS = severeCasesByRequestedTime(infectionsFS);
   return {
     data,
     impact: {
       currentlyInfected: currentlyInfected(reportedCases, 10),
       infectionsByRequestedTime: infections,
       severeCasesByRequestedTime: severeCaseFI,
-      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(data, severeCaseFI),
+      hospitalBedsByRequestedTime: Math.round(hospitalBedsByRequestedTime(data, severeCaseFI)),
       casesForICUByRequestedTime: casesForICUByRequestedTime(infections),
       casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTime(infections),
       dollarsInFlight: dollarsInFlight(data, infections).toFixed(2)
@@ -95,7 +95,7 @@ const covid19ImpactEstimator = (data = input) => {
       currentlyInfected: currentlyInfected(reportedCases, 50),
       infectionsByRequestedTime: infectionsFS,
       severeCasesByRequestedTime: severeCaseFS,
-      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(data, severeCaseFS),
+      hospitalBedsByRequestedTime: Math.round(hospitalBedsByRequestedTime(data, severeCaseFS)),
       casesForICUByRequestedTime: casesForICUByRequestedTime(infectionsFS),
       casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTime(infectionsFS),
       dollarsInFlight: dollarsInFlight(data, infectionsFS).toFixed(2)
