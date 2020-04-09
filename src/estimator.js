@@ -94,15 +94,15 @@ const covid19ImpactEstimator = (data) => {
 
 
   // Add hospital beds by requested time
-  result.impact.hospitalBedsByRequestedTime = getRemainingHospitalBedsCount(
+  result.impact.hospitalBedsByRequestedTime = Math.floor(getRemainingHospitalBedsCount(
     result.impact.severeCasesByRequestedTime,
     data.totalHospitalBeds
-  );
+  ));
 
-  result.severeImpact.hospitalBedsByRequestedTime = getRemainingHospitalBedsCount(
+  result.severeImpact.hospitalBedsByRequestedTime = Math.floor(getRemainingHospitalBedsCount(
     result.severeImpact.severeCasesByRequestedTime,
     data.totalHospitalBeds
-  );
+  ));
 
 
   // Add cases for ICU by requested time
