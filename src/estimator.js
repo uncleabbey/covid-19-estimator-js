@@ -29,6 +29,7 @@ const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
   return infected;
 };
 
+
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
 const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
