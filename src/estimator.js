@@ -31,7 +31,7 @@ const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
 
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
-const severeCasesByRequestedTime = (time) => (time * 0.15);
+const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
 
 const hospitalBedsByRequestedTime = (data, severity) => {
   const { totalHospitalBeds } = data;
