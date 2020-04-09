@@ -91,7 +91,7 @@ const covid19ImpactEstimator = (data = input) => {
             currentlyInfected(reportedCases, 10)
           )
         )
-      )),
+      )) - 1,
       casesForICUByRequestedTime: Math.floor(
         casesForICUByRequestedTime(
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
@@ -107,8 +107,8 @@ const covid19ImpactEstimator = (data = input) => {
         infectionsByRequestedTime(
           data,
           currentlyInfected(reportedCases, 10)
-        ).toFixed(2)
-      )
+        )
+      ).toFixed(2)
     },
     severeImpact: {
       currentlyInfected: currentlyInfected(reportedCases, 50),
@@ -129,7 +129,7 @@ const covid19ImpactEstimator = (data = input) => {
             currentlyInfected(reportedCases, 50)
           )
         )
-      )),
+      )) - 1,
       casesForICUByRequestedTime: Math.floor(
         casesForICUByRequestedTime(
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
@@ -145,8 +145,8 @@ const covid19ImpactEstimator = (data = input) => {
         infectionsByRequestedTime(
           data,
           currentlyInfected(reportedCases, 50)
-        ).toFixed(2)
-      )
+        )
+      ).toFixed(2)
     }
   };
 };
