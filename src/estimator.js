@@ -83,17 +83,15 @@ const covid19ImpactEstimator = (data = input) => {
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
         )
       ),
-      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
+      hospitalBedsByRequestedTime: Math.floor(hospitalBedsByRequestedTime(
         data,
-        Math.floor(
-          severeCasesByRequestedTime(
-            infectionsByRequestedTime(
-              data,
-              currentlyInfected(reportedCases, 10)
-            )
+        severeCasesByRequestedTime(
+          infectionsByRequestedTime(
+            data,
+            currentlyInfected(reportedCases, 10)
           )
         )
-      ),
+      )),
       casesForICUByRequestedTime: Math.floor(
         casesForICUByRequestedTime(
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
@@ -123,17 +121,15 @@ const covid19ImpactEstimator = (data = input) => {
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
         )
       ),
-      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
+      hospitalBedsByRequestedTime: Math.floor(hospitalBedsByRequestedTime(
         data,
-        Math.floor(
-          severeCasesByRequestedTime(
-            infectionsByRequestedTime(
-              data,
-              currentlyInfected(reportedCases, 50)
-            )
+        severeCasesByRequestedTime(
+          infectionsByRequestedTime(
+            data,
+            currentlyInfected(reportedCases, 50)
           )
         )
-      ),
+      )),
       casesForICUByRequestedTime: Math.floor(
         casesForICUByRequestedTime(
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
