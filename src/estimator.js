@@ -12,27 +12,25 @@ const input = {
   totalHospitalBeds: 1380614
 };
 
-
 const infectionsByRequestedTime = (data, theCurrentlyInfected) => {
   let infected = null;
   const { periodType, timeToElapse } = data;
   switch (periodType) {
     case 'weeks':
-      infected = theCurrentlyInfected * (2 ** (Math.round((timeToElapse * 7) / 3)));
+      infected = theCurrentlyInfected * 2 ** Math.floor((timeToElapse * 7) / 3);
       break;
     case 'months':
-      infected = theCurrentlyInfected * (2 ** (Math.round((timeToElapse * 30) / 3)));
+      infected = theCurrentlyInfected * 2 ** Math.floor((timeToElapse * 30) / 3);
       break;
     default:
-      infected = theCurrentlyInfected * (2 ** (Math.round(timeToElapse / 3)));
+      infected = theCurrentlyInfected * 2 ** Math.floor(timeToElapse / 3);
   }
   return infected;
 };
 
-
 const currentlyInfected = (reportedCases, estimate) => reportedCases * estimate;
 
-const severeCasesByRequestedTime = (time) => Math.round(time * 0.15);
+const severeCasesByRequestedTime = (time) => time * 0.15;
 
 const hospitalBedsByRequestedTime = (data, severity) => {
   const { totalHospitalBeds } = data;
@@ -80,24 +78,38 @@ const covid19ImpactEstimator = (data = input) => {
         data,
         currentlyInfected(reportedCases, 10)
       ),
-      severeCasesByRequestedTime: severeCasesByRequestedTime(
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
-      ),
-      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
-        data,
+      severeCasesByRequestedTime: Math.floor(
         severeCasesByRequestedTime(
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
         )
       ),
-      casesForICUByRequestedTime: casesForICUByRequestedTime(
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
+        data,
+        Math.floor(
+          severeCasesByRequestedTime(
+            infectionsByRequestedTime(
+              data,
+              currentlyInfected(reportedCases, 10)
+            )
+          )
+        )
       ),
-      casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTime(
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+      casesForICUByRequestedTime: Math.floor(
+        casesForICUByRequestedTime(
+          infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+        )
+      ),
+      casesForVentilatorsByRequestedTime: Math.floor(
+        casesForVentilatorsByRequestedTime(
+          infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+        )
       ),
       dollarsInFlight: dollarsInFlight(
         data,
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 10))
+        infectionsByRequestedTime(
+          data,
+          currentlyInfected(reportedCases, 10)
+        ).toFixed(2)
       )
     },
     severeImpact: {
@@ -106,27 +118,40 @@ const covid19ImpactEstimator = (data = input) => {
         data,
         currentlyInfected(reportedCases, 50)
       ),
-      severeCasesByRequestedTime: severeCasesByRequestedTime(
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
-      ),
-      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
-        data,
+      severeCasesByRequestedTime: Math.floor(
         severeCasesByRequestedTime(
           infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
         )
       ),
-      casesForICUByRequestedTime: casesForICUByRequestedTime(
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+      hospitalBedsByRequestedTime: hospitalBedsByRequestedTime(
+        data,
+        Math.floor(
+          severeCasesByRequestedTime(
+            infectionsByRequestedTime(
+              data,
+              currentlyInfected(reportedCases, 50)
+            )
+          )
+        )
       ),
-      casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTime(
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+      casesForICUByRequestedTime: Math.floor(
+        casesForICUByRequestedTime(
+          infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+        )
+      ),
+      casesForVentilatorsByRequestedTime: Math.floor(
+        casesForVentilatorsByRequestedTime(
+          infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+        )
       ),
       dollarsInFlight: dollarsInFlight(
         data,
-        infectionsByRequestedTime(data, currentlyInfected(reportedCases, 50))
+        infectionsByRequestedTime(
+          data,
+          currentlyInfected(reportedCases, 50)
+        ).toFixed(2)
       )
     }
   };
 };
-
 export default covid19ImpactEstimator;
