@@ -49,22 +49,22 @@ const dollarsInFlight = (data, infection) => {
   let dollars;
   switch (periodType) {
     case 'weeks':
-      dollars = infection
+      dollars = (infection
         * avgDailyIncomePopulation
-        * avgDailyIncomeInUSD
-        * (timeToElapse * 7);
+        * avgDailyIncomeInUSD)
+        / (timeToElapse * 7);
       break;
     case 'months':
-      dollars = infection
+      dollars = (infection
         * avgDailyIncomePopulation
-        * avgDailyIncomeInUSD
-        * (timeToElapse * 30);
+        * avgDailyIncomeInUSD)
+        / (timeToElapse * 30);
       break;
     default:
-      dollars = infection
+      dollars = (infection
         * avgDailyIncomePopulation
-        * avgDailyIncomeInUSD
-        * timeToElapse;
+        * avgDailyIncomeInUSD)
+        / (timeToElapse);
   }
   return dollars;
 };
@@ -92,7 +92,7 @@ const covid19ImpactEstimator = (data = input) => {
       casesForVentilatorsByRequestedTime: Math.trunc(
         casesForVentilatorsByRequestedTime(infections)
       ),
-      dollarsInFlight: Number(dollarsInFlight(data, infections).toFixed(2))
+      dollarsInFlight: Math.trunc(dollarsInFlight(data, infections))
     },
     severeImpact: {
       currentlyInfected: currentlyInfected(reportedCases, 50),
@@ -103,7 +103,7 @@ const covid19ImpactEstimator = (data = input) => {
       casesForVentilatorsByRequestedTime: Math.trunc(
         casesForVentilatorsByRequestedTime(infectionsFS)
       ),
-      dollarsInFlight: Number(dollarsInFlight(data, infectionsFS).toFixed(2))
+      dollarsInFlight: Math.trunc(dollarsInFlight(data, infectionsFS))
     }
   };
 };
