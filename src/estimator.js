@@ -38,6 +38,7 @@ const hospitalBedsByRequestedTime = (data, severity) => {
   return availableBeds - severity;
 };
 
+
 const casesForICUByRequestedTime = (infections) => infections * 0.05;
 
 const casesForVentilatorsByRequestedTime = (infections) => infections * 0.02;
